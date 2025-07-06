@@ -9,6 +9,8 @@ router.get("/", blogController.blog_index);
 
 router.post("/", postValidation, checkBlog, blogController.blog_create_post);
 
+router.get("/page", blogController.blogs_page);
+
 router.post("/:id/like", blogController.blog_like_post);
 
 router.get("/create", Auth.isAuthenticated, blogController.blog_create_get);

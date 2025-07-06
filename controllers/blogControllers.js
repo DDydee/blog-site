@@ -2,18 +2,22 @@ const Blog = require("../models/blog");
 const limit = 10;
 
 const blog_index = (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const offset = (page - 1) * limit;
   console.log(req.session.userId);
-  Blog.aggregate([{ $skip: offset }, { $limit: limit }])
-    .sort({ createdAt: -1 })
-    .then((result) => {
-      res.render("blogs/index", { title: "All blogs", blogs: result, page });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  const page = parseInt(req.query.page) || 1;
+  getBlogs(page, limit).then((blogs) => {
+    res.render("blogs/index", { title: "All blogs", blogs, page: page + 1 });
+  });
 };
+
+const blogs_page = (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  getBlogs(page, limit).then((blogs) => res.render("partials/blog", { blogs }));
+};
+
+async function getBlogs(page, limit) {
+  const offset = (page - 1) * limit;
+  return await Blog.find().sort({ createdAt: -1 }).skip(offset).limit(limit);
+}
 
 const blog_like_post = async (req, res) => {
   const post = await Blog.findById(req.params.id);
@@ -101,4 +105,5 @@ module.exports = {
   blog_edit_get,
   blog_edit_put,
   blog_like_post,
+  blogs_page,
 };
