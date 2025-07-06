@@ -8,26 +8,28 @@
 
          <div class="blogs content">
             <h2>All Blogs</h2>
-
-            <% if (blogs.length> 0) { %>
-               <% blogs.forEach(blog=> { %>
-                  <%- include('../partials/blog.ejs', {blog}) %>
-                     <% }); %>
-                        <% } else { %>
-                           <h3>Blogs are coming soon...</h3>
-                           <% } %>
+            <%- include('../partials/blog.ejs',{blogs}) %>
          </div>
-         <a href="/blogs?page=<%= page+1 %>"><button class="load-more-btn">Показать ещё...</button></a>
+         <button onclick="loadMore(this)" data-page="<%= page %>" class="load-more-btn">Показать ещё...</button>
          <%- include('../partials/footer.ejs') %>
             <script>
                function likePost(blogId, btn) {
                   fetch(`/blogs/${blogId}/like`, { method: `POST` })
                      .then(res => {
-                        console.log(res);
                         return res.json();
                      })
                      .then(data => {
                         btn.querySelector('span').textContent = data.likes;
+                     })
+               }
+
+               function loadMore(btn) {
+                  const page = parseInt(btn.dataset.page);
+                  fetch(`/blogs/page?page=${page}`).then(res => res.text())
+                     .then(html => {
+                        document.querySelector('.blogs').insertAdjacentHTML('beforeend', html);
+                        history.pushState(null, '', `/blogs?page=${page}`);
+                        btn.dataset.page = `${page + 1}`
                      })
                }
             </script>
