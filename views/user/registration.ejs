@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs') %>
+
+  <body>
+    <%- include('../partials/nav.ejs') %>
+      <div class="registration-user content">
+        <form action="/user/registration" method="post">
+          <label for="login">Login:</label>
+          <input type="text" id="login" class="<%= errors.login ? 'errors-border' : '' %>" name="login"
+            value="<%= old.login || '' %>" required>
+          <% if (errors.login) { %>
+            <div class="error">
+              <%= errors.login %>
+            </div>
+            <% } %>
+              <label for="email">Email:</label>
+              <input type="email" id="email" class="<%= errors.email ? 'errors-border' : '' %>" name="email"
+                value="<%= old.email || '' %>" required>
+              <% if (errors.email) { %>
+                <div class="error">
+                  <%= errors.email %>
+                </div>
+                <% } %>
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" class="<%= errors.password ? 'errors-border' : '' %>"
+                    name="password" value="<%= old.password || '' %>" required>
+                  <% if (errors.password) { %>
+                    <div class="error">
+                      <%= errors.password %>
+                    </div>
+                    <% } %>
+                      <button type="submit">Submit</button>
+        </form>
+      </div>
+      <%- include('../partials/footer.ejs') %>
+  </body>
+
+</html>

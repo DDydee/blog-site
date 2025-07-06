@@ -1,0 +1,16 @@
+<div class="blog-card">
+  <a class="blog-link" href="/blogs/<%= blog._id %>">
+    <h3 class="blog-title">
+      <%= blog.title %>
+    </h3>
+    <p class="blog-snippet">
+      <%= blog.snippet %>
+    </p>
+  </a>
+  <div class="blog-meta">
+    <button class="like-btn" onclick="likePost('<%=blog._id %>', this)" type="button">❤️<span>
+        <%= blog.likes.size || 0%>
+      </span>
+    </button>
+  </div>
+</div>

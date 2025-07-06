@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs') %>
+
+
+  <body>
+    <%- include('../partials/nav.ejs') %>
+      <div class="create-blog content">
+        <form action="<%= formAction %>" method="post">
+          <label for="title">Blog title:</label>
+          <input type="text" id="title" class="<%= errors.title ? 'errors-border' : '' %>" name="title"
+            value="<%= blog.title || '' %>" required>
+          <% if (errors.title) { %>
+            <div class="error">
+              <%= errors.title %>
+            </div>
+            <% } %>
+              <label for="snippet">Blog snippet:</label>
+              <input type="text" id="snippet" class="<%= errors.sinppet ? 'errors-border' : '' %>" name="snippet"
+                value="<%= blog.snippet || '' %>" required>
+              <% if (errors.snippet) { %>
+                <div class="error">
+                  <%= errors.title %>
+                </div>
+                <% } %>
+                  <label for="body">Blog body:</label>
+                  <textarea name="body" name="body" id="body" class="<%= errors.body ? 'errors-border' : '' %>"
+                    required><%= blog.body || '' %></textarea>
+                  <% if (errors.body) { %>
+                    <div class="error">
+                      <%= errors.body %>
+                    </div>
+                    <% } %>
+                      <button type="submit">
+                        <%= blog._id ? 'Update' : 'Submit' %>
+                      </button>
+        </form>
+      </div>
+      <%- include('../partials/footer.ejs') %>
+  </body>
+
+</html>
