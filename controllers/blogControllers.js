@@ -4,9 +4,9 @@ const limit = 10;
 
 const blog_index = (req, res) => {
   console.log(req.session.userId);
-  const searchText = req.query.search || "";
+  const query = req.query.query || "";
   const page = parseInt(req.query.page) || 1;
-  getBlogs(page, limit, searchText).then((blogs) => {
+  getBlogs(page, limit, query).then((blogs) => {
     res.render("blogs/index", {
       title: "All blogs",
       blogs,
@@ -17,8 +17,8 @@ const blog_index = (req, res) => {
 
 const blogs_page = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const searchText = req.query.search;
-  getBlogs(page, limit, searchText).then((blogs) =>
+  const query = req.query.query || "";
+  getBlogs(page, limit, query).then((blogs) =>
     res.render("partials/blog", { blogs })
   );
 };
