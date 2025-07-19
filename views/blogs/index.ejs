@@ -5,33 +5,17 @@
 
    <body>
       <%- include('../partials/nav.ejs') %>
-
+         <form class="search-box" action="/blogs/search" method="GET">
+            <input type="text" class="search-box__input" name="query" placeholder="Поиск...">
+            <button class="search-box__button" type="submit">Найти</button>
+         </form>
          <div class="blogs content">
             <h2>All Blogs</h2>
             <%- include('../partials/blog.ejs',{blogs}) %>
          </div>
          <button onclick="loadMore(this)" data-page="<%= page %>" class="load-more-btn">Показать ещё...</button>
          <%- include('../partials/footer.ejs') %>
-            <script>
-               function likePost(blogId, btn) {
-                  fetch(`/blogs/${blogId}/like`, { method: `POST` })
-                     .then(res => {
-                        return res.json();
-                     })
-                     .then(data => {
-                        btn.querySelector('span').textContent = data.likes;
-                     })
-               }
-
-               function loadMore(btn) {
-                  const page = parseInt(btn.dataset.page);
-                  fetch(`/blogs/page?page=${page}`).then(res => res.text())
-                     .then(html => {
-                        document.querySelector('.blogs').insertAdjacentHTML('beforeend', html);
-                        history.pushState(null, '', `/blogs?page=${page}`);
-                        btn.dataset.page = `${page + 1}`
-                     })
-               }
+            <script src="/scripts/blog-index.js">
             </script>
    </body>
 

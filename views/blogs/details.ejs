@@ -9,26 +9,35 @@
           <%= blog.title %>
         </h2>
         <div class="content">
-          <p>
-            <%= blog.body %>
-          </p>
+          <%- blogBody %>
         </div>
-        <a class="delete" data-doc="<%= blog._id %>"><img src="/trash.svg" alt="delete icon"></a>
-        <a class="edit" href="/blogs/edit/<%= blog._id %>"><img src="/edit.svg" alt="edit icon"></a>
+        <% if (!notUserPost) { %>
+          <a class="delete" data-doc="<%= blog._id %>"><img src="/trash.svg" alt="delete icon"></a>
+          <a class="edit" href="/blogs/edit/<%= blog._id %>"><img src="/edit.svg" alt="edit icon"></a>
+          <% } %>
+      </div>
+      <div class="comments-container">
+        <form class="comment-form" action="/blogs/comment?id=<%= blog._id %>" method="post">
+          <textarea class="comment-text" name="comment" placeholder="Ваш комментарий..." required></textarea>
+          <button class="comment-button" type="submit">Отправить</button>
+          </textarea>
+        </form>
+
+        <div class="comments-list">
+          <% blog.comments.forEach(el=> { %>
+            <div class="comment">
+              <p class="author">
+                <%= el.author.login %>
+              </p>
+              <p class="text">
+                <%= el.comment %>
+              </p>
+            </div>
+            <% }) %>
+        </div>
       </div>
       <%- include('../partials/footer.ejs') %>
-        <script>
-          const trachcan = document.querySelector('a.delete');
-          trachcan.addEventListener('click', (e) => {
-            const endpoint = `/blogs/${trachcan.dataset.doc}`;
-
-            fetch(endpoint, {
-              method: 'DELETE'
-            }).then(response => response.json())
-              .then(data => window.location.href = data.redirect)
-              .catch(err => console.log(err))
-          })
-
+        <script src="/scripts/details.js">
         </script>
   </body>
 

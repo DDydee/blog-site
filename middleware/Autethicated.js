@@ -10,25 +10,27 @@ function isAuthenticated(req, res, next) {
   res.redirect("/user/login");
 }
 
-function isAdmin(req, res, next) {
-  console.log(`это isAdmin`);
-  if (req.session.isAdmin) {
-    console.log(`Все прошло норм`);
-    return next();
-  }
-  console.log(`нет прав администратора`);
-  res.redirect("/user/login");
+function setLocalsData(req, res, next) {
+  res.locals.currentUser = req.session.userId || null;
+  res.locals.userIsAdmin = req.session.isAdmin || null;
+  next();
 }
 
 async function checkUser(req, res, next) {
+  if (req.session.isAdmin) {
+    console.log(`Все прошло норм`);
+    res.locals.notUserPost = false;
+    return next();
+  }
   const postId = req.params.id;
   const findedPost = await Blog.findById(postId);
   if (findedPost.author == req.session.userId) {
+    res.locals.notUserPost = false;
     return next();
   } else {
-    console.log("U can't edit not your post");
-    return res.redirect("/blogs");
+    res.locals.notUserPost = true;
+    return next();
   }
 }
 
-module.exports = { isAuthenticated, isAdmin, checkUser };
+module.exports = { isAuthenticated, checkUser, setLocalsData };

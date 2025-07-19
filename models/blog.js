@@ -13,6 +13,7 @@ const blogSchema = new Schema(
       required: true,
     },
     likes: { type: Map, default: {} },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true }
 );
