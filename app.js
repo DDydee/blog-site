@@ -8,6 +8,7 @@ const MongoStore = require("connect-mongo");
 
 const blogRoutes = require("./routes/blogRoutes");
 const userRoutes = require("./routes/userRoutes");
+const { setLocalsData } = require("./middleware/Autethicated");
 
 dotenv.config();
 const connectDB = process.env.DB_URL;
@@ -47,6 +48,7 @@ app.use(
 );
 
 //routes
+app.use(setLocalsData);
 app.get("/", (req, res) => {
   res.redirect("/blogs/");
 });

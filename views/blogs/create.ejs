@@ -4,6 +4,7 @@
 <%- include('../partials/head.ejs') %>
 
 
+
   <body>
     <%- include('../partials/nav.ejs') %>
       <div class="create-blog content">
@@ -26,7 +27,7 @@
                 <% } %>
                   <label for="body">Blog body:</label>
                   <textarea name="body" name="body" id="body" class="<%= errors.body ? 'errors-border' : '' %>"
-                    required><%= blog.body || '' %></textarea>
+                    required> <%= blog.body || '' %></textarea>
                   <% if (errors.body) { %>
                     <div class="error">
                       <%= errors.body %>
@@ -38,6 +39,72 @@
         </form>
       </div>
       <%- include('../partials/footer.ejs') %>
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+        <script>
+          new EasyMDE({
+            autofocus: true,
+            autosave: {
+              enabled: false,
+              uniqueId: "MyUniqueID",
+              delay: 1000,
+            },
+            blockStyles: {
+              bold: "__",
+              italic: "_",
+            },
+            element: document.getElementById("body"),
+            forceSync: true,
+            hideIcons: ["guide", "heading"],
+            indentWithTabs: false,
+            insertTexts: {
+              horizontalRule: ["", "\n\n-----\n\n"],
+              image: ["![](http://", ")"],
+              link: ["[", "](http://)"],
+              table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
+            },
+            lineWrapping: false,
+            minHeight: "500px",
+            parsingConfig: {
+              allowAtxHeaderWithoutSpace: true,
+              strikethrough: false,
+              underscoresBreakWords: true,
+            },
+            placeholder: "Type here...",
+            previewRender: function (plainText) {
+              return customMarkdownParser(plainText); // Returns HTML from a custom parser
+            },
+            promptURLs: true,
+            promptTexts: {
+              image: "Custom prompt for URL:",
+              link: "Custom prompt for URL:",
+            },
+            renderingConfig: {
+              singleLineBreaks: false,
+              codeSyntaxHighlighting: true,
+            },
+            shortcuts: {
+              drawTable: "Cmd-Alt-T"
+            },
+            showIcons: ["code", "table"],
+            spellChecker: false,
+            status: false,
+            status: ["autosave", "lines", "words", "cursor"], // Optional usage
+            status: ["autosave", "lines", "words", "cursor", {
+              className: "keystrokes",
+              defaultValue: function (el) {
+                this.keystrokes = 0;
+                el.innerHTML = "0 Keystrokes";
+              },
+              onUpdate: function (el) {
+                el.innerHTML = ++this.keystrokes + " Keystrokes";
+              },
+            }], // Another optional usage, with a custom status bar item that counts keystrokes
+            styleSelectedText: false,
+            syncSideBySidePreviewScroll: false,
+            toolbar: false,
+            toolbarTips: false,
+          });
+        </script>
   </body>
 
 </html>

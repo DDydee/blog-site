@@ -1,9 +1,5 @@
 const express = require("express");
-const {
-  loginValidator,
-  registerValidator,
-  checkValidator,
-} = require("../middleware/Validation");
+const { checkValidator } = require("../middleware/Validation");
 const userControllers = require("../controllers/userControllers");
 
 const router = express.Router();
@@ -17,5 +13,6 @@ router.post(
 router.get("/", userControllers.user_page);
 router.get("/login", userControllers.user_login_get);
 router.post("/login", checkValidator, userControllers.user_login_in_post);
+router.get("/logout", userControllers.user_logout);
 
 module.exports = router;

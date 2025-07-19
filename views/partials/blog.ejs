@@ -14,6 +14,11 @@
             <%= blog.likes.size || 0%>
           </span>
         </button>
+        <div class="comment-count">
+          💬 <span>
+            <%= blog.comments?.length || 0 %>
+          </span>
+        </div>
       </div>
     </div>
     <% }); %>

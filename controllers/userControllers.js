@@ -9,16 +9,18 @@ const user_registration = (req, res) => {
   });
 };
 
-function checkUser(email) {
-  User.findOne({ email: email }).then((user) => (user ? true : false));
+function checkUser(email, login) {
+  return User.findOne({ $or: [{ email: email }, { login: login }] }).then(
+    (user) => Boolean(user)
+  );
 }
 
 const user_registration_post = async (req, res) => {
   const { login, email, password } = req.body;
 
-  if (checkUser(email)) {
-    console.log("Почта уже используется");
-    return res.redirect("/user/registration");
+  if (await checkUser(email, login)) {
+    console.log("Почта/логин уже используется");
+    return res.status(400).redirect("/user/registration");
   }
 
   try {
@@ -70,6 +72,15 @@ const user_login_get = (req, res) => {
   res.render("user/login", { title: "Login page" });
 };
 
+const user_logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+  res.redirect("/blogs");
+};
+
 const user_page = (req, res) => {
   res.render("user/user", { title: "User page" });
 };
@@ -80,4 +91,5 @@ module.exports = {
   user_page,
   user_login_get,
   user_login_in_post,
+  user_logout,
 };

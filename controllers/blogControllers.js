@@ -1,32 +1,39 @@
 const Blog = require("../models/blog");
+const marked = require("marked");
 const limit = 10;
 
 const blog_index = (req, res) => {
   console.log(req.session.userId);
+  const searchText = req.query.search || "";
   const page = parseInt(req.query.page) || 1;
-  getBlogs(page, limit).then((blogs) => {
-    res.render("blogs/index", { title: "All blogs", blogs, page: page + 1 });
+  getBlogs(page, limit, searchText).then((blogs) => {
+    res.render("blogs/index", {
+      title: "All blogs",
+      blogs,
+      page: page + 1,
+    });
   });
 };
 
 const blogs_page = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  getBlogs(page, limit).then((blogs) => res.render("partials/blog", { blogs }));
+  const searchText = req.query.search;
+  getBlogs(page, limit, searchText).then((blogs) =>
+    res.render("partials/blog", { blogs })
+  );
 };
 
-async function getBlogs(page, limit) {
+async function getBlogs(page, limit, title = "") {
   const offset = (page - 1) * limit;
-  return await Blog.find().sort({ createdAt: -1 }).skip(offset).limit(limit);
+  const filter = {};
+  if (title) {
+    filter.title = { $regex: title, $options: "i" };
+  }
+  return await Blog.find(filter)
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit);
 }
-
-const blog_like_post = async (req, res) => {
-  const post = await Blog.findById(req.params.id);
-  post.likes.has(req.session.userId)
-    ? post.likes.delete(req.session.userId)
-    : post.likes.set(req.session.userId, true);
-  await post.save();
-  res.json({ likes: post.likes.size });
-};
 
 const blog_create_post = (req, res) => {
   const blog = new Blog(req.body);
@@ -44,8 +51,19 @@ const blog_create_post = (req, res) => {
 const blog_details = (req, res) => {
   const id = req.params.id;
   Blog.findById(id)
+    .populate({
+      path: "comments",
+      select: "comment",
+      populate: { path: "author", select: "login" },
+    })
+    .exec()
     .then((result) => {
-      res.render("blogs/details", { blog: result, title: "Blog details" });
+      const blogBody = marked.parse(result.body);
+      res.render("blogs/details", {
+        blog: result,
+        blogBody,
+        title: "Blog details",
+      });
     })
     .catch((err) => {
       res.redirect("/404");
@@ -59,6 +77,10 @@ const blog_create_get = (req, res) => {
     blog: {},
     formAction: "/blogs",
     errors: {},
+    user: {
+      isAdmin: req.session.isAdmin || "",
+      isAutethicated: req.session.userId || "",
+    },
   });
 };
 
@@ -104,6 +126,5 @@ module.exports = {
   blog_delete,
   blog_edit_get,
   blog_edit_put,
-  blog_like_post,
   blogs_page,
 };

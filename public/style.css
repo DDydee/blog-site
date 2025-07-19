@@ -24,7 +24,7 @@ ul {
 nav {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   text-transform: uppercase;
@@ -120,6 +120,33 @@ footer {
 .like-btn:hover {
   transform: scale(1.1);
 }
+/* comments style  */
+.comment-count {
+  font-size: 1rem;
+  color: #555;
+}
+
+.comment {
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.comment .author {
+  margin: 0 0 0.5rem 0;
+  font-weight: bold;
+  color: #333;
+}
+
+.comment .text {
+  margin: 0;
+  color: #555;
+  line-height: 1.4;
+}
+/* comments style end*/
 
 .load-more-btn {
   display: inline-block;
@@ -137,6 +164,41 @@ footer {
   background-color: #45a049;
 }
 
+/* search style */
+.search-box {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.search-box__input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
+  transition: border-color 0.2s;
+}
+
+.search-box__input:focus {
+  border-color: #f12222;
+}
+
+.search-box__button {
+  padding: 8px 16px;
+  border: 1px solid #f12222;
+  background-color: #f12222;
+  color: white;
+  font-size: 14px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-box__button:hover {
+  background-color: #d82020;
+}
 /* details styles */
 
 .details {
@@ -175,6 +237,40 @@ footer {
 .delete:hover {
   cursor: pointer;
   box-shadow: 1px 2px 3px black;
+}
+/* comment styles */
+
+.comments-container {
+  margin-top: 30px;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment-text {
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.comment-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.comment-button:hover {
+  background-color: #45a049;
 }
 
 /* create styles */
